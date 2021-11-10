@@ -23,7 +23,7 @@ body {
 }
 
 div {
-  border: 1px solid red !important;
+  border: 1px solid lightslategrey !important;
 }
 
 button {
@@ -130,7 +130,6 @@ button:focus {
 }
 
 .card {
-  --card-translateY-offset: 100vh;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -173,17 +172,20 @@ button:focus {
   --card-scale-offset: 1.2;
   --opacity: 0.8;
 }
-.card.previous--card {
+.card.previous--card, .card.previous-previous--card {
   --card-translateX-offset: calc(-1 * var(--card-width) * 1.1);
   --card-rotation-offset: 25deg;
 }
-.card.next--card {
+.card.next--card, .card.next-next--card {
   --card-translateX-offset: calc(var(--card-width) * 1.1);
   --card-rotation-offset: -25deg;
 }
 .card.previous--card, .card.next--card {
   --card-scale-offset: 0.9;
   --opacity: 0.4;
+}
+.card.previous-previous--card, .card.next-next--card, .card.hidden--card {
+  visibility: hidden;
 }
 
 .infoList {

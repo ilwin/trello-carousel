@@ -24,7 +24,7 @@ body {
 }
 
 div {
-  border: 1px solid red !important;
+  border: 1px solid lightslategrey !important;
 }
 
 button {
@@ -140,7 +140,7 @@ button {
 }
 
 .card {
-  --card-translateY-offset: 100vh;
+  //--card-translateY-offset: 100vh;
 
   position: absolute;
   left: 50%;
@@ -191,12 +191,14 @@ button {
     --opacity: 0.8;
   }
 
-  &.previous--card {
+  &.previous--card,
+  &.previous-previous--card {
     --card-translateX-offset: calc(-1 * var(--card-width) * 1.1);
     --card-rotation-offset: 25deg;
   }
 
-  &.next--card {
+  &.next--card,
+  &.next-next--card {
     --card-translateX-offset: calc(var(--card-width) * 1.1);
     --card-rotation-offset: -25deg;
   }
@@ -206,6 +208,13 @@ button {
     --card-scale-offset: 0.9;
     --opacity: 0.4;
   }
+
+  &.previous-previous--card,
+  &.next-next--card,
+  &.hidden--card{
+    visibility: hidden;
+  }
+
 }
 
 .infoList {

@@ -1,6 +1,12 @@
+import {top_250_movies} from "./top_250_movies.mjs";
+
 console.clear();
+const slides = top_250_movies;
+console.log(top_250_movies)
 
 const { gsap, imagesLoaded } = window;
+
+let currentIndex = 1;
 
 const buttons = {
     prev: document.querySelector(".btn--left"),
@@ -15,14 +21,51 @@ buttons.next.addEventListener("click", () => swapCards("right"));
 
 buttons.prev.addEventListener("click", () => swapCards("left"));
 
-function swapCards(direction) {
-    const currentCardEl = cardsContainerEl.querySelector(".current--card");
-    const previousCardEl = cardsContainerEl.querySelector(".previous--card");
-    const nextCardEl = cardsContainerEl.querySelector(".next--card");
+function buildSlidesHtml (slides) {
+    const carousel = document.querySelector('.cards__wrapper');
 
-    const currentBgImageEl = appBgContainerEl.querySelector(".current--image");
-    const previousBgImageEl = appBgContainerEl.querySelector(".previous--image");
-    const nextBgImageEl = appBgContainerEl.querySelector(".next--image");
+    slides.map((slide, index) => {
+        const divCard = document.createElement("div");
+        const classById = {
+            [slides.length -1]: "previous-previous--card",
+            [slides.length]:    "previous--card",
+            1:                  "current--card",
+            2:                  "next--card",
+            3:                  "next-next--card",
+            "theRest":          "hidden--card"
+        }
+        divCard.setAttribute("class", "card");
+        divCard.setAttribute("id", `card-${index + 1}`);
+
+        //Set classes for image wrapper
+        if(classById.hasOwnProperty((index + 1).toString())) {
+            divCard.classList.add(classById[index + 1]);
+        } else {
+            divCard.classList.add(classById["theRest"]);
+        }
+
+        const divCardImage = document.createElement("div");
+        divCardImage.setAttribute("class", "card__image");
+
+        const img = document.createElement("img");
+        img.setAttribute("src", slide.image);
+        img.setAttribute("alt", "");
+
+
+        divCardImage.append(img);
+        divCard.append(divCardImage);
+        carousel.append(divCard);//
+    });
+}
+
+buildSlidesHtml(slides);
+function swapCards(direction) {
+    let currentCardEl = cardsContainerEl.querySelector(".current--card");
+    let previousCardEl = cardsContainerEl.querySelector(".previous--card");
+    let previousPreviousCardEl = cardsContainerEl.querySelector(".previous-previous--card");
+    let nextCardEl = cardsContainerEl.querySelector(".next--card");
+    let nextNextCardEl = cardsContainerEl.querySelector(".next-next--card");
+    console.log("nextNextCardEl:", nextNextCardEl);
 
     // changeInfo(direction);
     swapCardsClass();
@@ -31,42 +74,49 @@ function swapCards(direction) {
 
     function swapCardsClass() {
         currentCardEl.classList.remove("current--card");
-        previousCardEl.classList.remove("previous--card");
-        nextCardEl.classList.remove("next--card");
+        previousCardEl && previousCardEl.classList.remove("previous--card");
+        nextCardEl && nextCardEl.classList.remove("next--card");
+        previousPreviousCardEl && previousPreviousCardEl.classList.remove("previous-previous--card");
+        nextNextCardEl.classList.remove("next-next--card");
 
-        currentBgImageEl.classList.remove("current--image");
-        previousBgImageEl.classList.remove("previous--image");
-        nextBgImageEl.classList.remove("next--image");
 
         currentCardEl.style.zIndex = "50";
-        currentBgImageEl.style.zIndex = "-2";
 
         if (direction === "right") {
+            currentIndex = (currentIndex + 1) % slides.length;
             previousCardEl.style.zIndex = "20";
             nextCardEl.style.zIndex = "30";
-
-            nextBgImageEl.style.zIndex = "-1";
-
+            // const
             currentCardEl.classList.add("previous--card");
-            previousCardEl.classList.add("next--card");
+            previousCardEl.classList.add("previous-previous--card");
             nextCardEl.classList.add("current--card");
-
-            currentBgImageEl.classList.add("previous--image");
-            previousBgImageEl.classList.add("next--image");
-            nextBgImageEl.classList.add("current--image");
+            nextNextCardEl.classList.add("next--card");
+            previousPreviousCardEl.classList.add("hidden--card");
+            //loop through all.At the end just to start
+            const newPreviousPreviousCardEl = document.getElementById(
+                `card-${(currentIndex + 2) % slides.length || currentIndex + 2}`)
+            newPreviousPreviousCardEl.classList.remove("hidden--card");
+            newPreviousPreviousCardEl.classList.add("next-next--card");
         } else if (direction === "left") {
-            previousCardEl.style.zIndex = "30";
-            nextCardEl.style.zIndex = "20";
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
 
-            previousBgImageEl.style.zIndex = "-1";
+            if(previousCardEl) {
+                previousCardEl.style.zIndex = "30";
+            }
+            if(nextCardEl){
+                nextCardEl.style.zIndex = "20";
+            }
 
             currentCardEl.classList.add("next--card");
             previousCardEl.classList.add("current--card");
-            nextCardEl.classList.add("previous--card");
-
-            currentBgImageEl.classList.add("next--image");
-            previousBgImageEl.classList.add("current--image");
-            nextBgImageEl.classList.add("previous--image");
+            nextCardEl.classList.add("next-next--card");
+            previousPreviousCardEl.classList.add("previous--card");
+            nextNextCardEl.classList.add("hidden--card");
+            //loop through all.At the end just to start
+            const newPreviousPreviousCardEl = document.getElementById(
+                `card-${(currentIndex - 2 + slides.length) % slides.length || slides.length}`)
+            newPreviousPreviousCardEl.classList.remove("hidden--card");
+            newPreviousPreviousCardEl.classList.add("previous-previous--card");
         }
     }
 }
@@ -170,14 +220,14 @@ function initCardEvents() {
     });
 }
 
-initCardEvents();
+// initCardEvents();
 
 function removeCardEvents(card) {
     card.removeEventListener("pointermove", updateCard);
 }
 
 function init() {
-
+    console.log("Init");
     let tl = gsap.timeline();
 
     tl.to(cardsContainerEl.children, {
@@ -213,7 +263,7 @@ const waitForImages = () => {
     const totalImages = images.length;
     let loadedImages = 0;
     const loaderEl = document.querySelector(".loader span");
-
+    console.log("waitForImages");
     gsap.set(cardsContainerEl.children, {
         "--card-translateY-offset": "100vh",
     });
@@ -227,7 +277,6 @@ const waitForImages = () => {
     });
 
     images.forEach((image) => {
-        console.log("djkfs");
         imagesLoaded(image, (instance) => {
             if (instance.isComplete) {
                 loadedImages++;
