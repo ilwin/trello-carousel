@@ -9,7 +9,7 @@ const buttons = {
 const cardsContainerEl = document.querySelector(".cards__wrapper");
 const appBgContainerEl = document.querySelector(".app__bg");
 
-const cardInfosContainerEl = document.querySelector(".info__wrapper");
+// const cardInfosContainerEl = document.querySelector(".info__wrapper");
 
 buttons.next.addEventListener("click", () => swapCards("right"));
 
@@ -24,7 +24,7 @@ function swapCards(direction) {
     const previousBgImageEl = appBgContainerEl.querySelector(".previous--image");
     const nextBgImageEl = appBgContainerEl.querySelector(".next--image");
 
-    changeInfo(direction);
+    // changeInfo(direction);
     swapCardsClass();
 
     removeCardEvents(currentCardEl);
@@ -71,68 +71,68 @@ function swapCards(direction) {
     }
 }
 
-function changeInfo(direction) {
-    let currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-    let previousInfoEl = cardInfosContainerEl.querySelector(".previous--info");
-    let nextInfoEl = cardInfosContainerEl.querySelector(".next--info");
-
-    gsap.timeline()
-        .to([buttons.prev, buttons.next], {
-            duration: 0.2,
-            opacity: 0.5,
-            pointerEvents: "none",
-        })
-        .to(
-            currentInfoEl.querySelectorAll(".text"),
-            {
-                duration: 0.4,
-                stagger: 0.1,
-                translateY: "-120px",
-                opacity: 0,
-            },
-            "-="
-        )
-        .call(() => {
-            swapInfosClass(direction);
-        })
-        .call(() => initCardEvents())
-        .fromTo(
-            direction === "right"
-                ? nextInfoEl.querySelectorAll(".text")
-                : previousInfoEl.querySelectorAll(".text"),
-            {
-                opacity: 0,
-                translateY: "40px",
-            },
-            {
-                duration: 0.4,
-                stagger: 0.1,
-                translateY: "0px",
-                opacity: 1,
-            }
-        )
-        .to([buttons.prev, buttons.next], {
-            duration: 0.2,
-            opacity: 1,
-            pointerEvents: "all",
-        });
-
-    function swapInfosClass() {
-        currentInfoEl.classList.remove("current--info");
-        previousInfoEl.classList.remove("previous--info");
-        nextInfoEl.classList.remove("next--info");
-
-        if (direction === "right") {
-            currentInfoEl.classList.add("previous--info");
-            nextInfoEl.classList.add("current--info");
-            previousInfoEl.classList.add("next--info");
-        } else if (direction === "left") {
-            currentInfoEl.classList.add("next--info");
-            nextInfoEl.classList.add("previous--info");
-            previousInfoEl.classList.add("current--info");
-        }
-    }
-}
+// function changeInfo(direction) {
+//     let currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+//     let previousInfoEl = cardInfosContainerEl.querySelector(".previous--info");
+//     let nextInfoEl = cardInfosContainerEl.querySelector(".next--info");
+//
+//     gsap.timeline()
+//         .to([buttons.prev, buttons.next], {
+//             duration: 0.2,
+//             opacity: 0.5,
+//             pointerEvents: "none",
+//         })
+//         .to(
+//             currentInfoEl.querySelectorAll(".text"),
+//             {
+//                 duration: 0.4,
+//                 stagger: 0.1,
+//                 translateY: "-120px",
+//                 opacity: 0,
+//             },
+//             "-="
+//         )
+//         .call(() => {
+//             swapInfosClass(direction);
+//         })
+//         .call(() => initCardEvents())
+//         .fromTo(
+//             direction === "right"
+//                 ? nextInfoEl.querySelectorAll(".text")
+//                 : previousInfoEl.querySelectorAll(".text"),
+//             {
+//                 opacity: 0,
+//                 translateY: "40px",
+//             },
+//             {
+//                 duration: 0.4,
+//                 stagger: 0.1,
+//                 translateY: "0px",
+//                 opacity: 1,
+//             }
+//         )
+//         .to([buttons.prev, buttons.next], {
+//             duration: 0.2,
+//             opacity: 1,
+//             pointerEvents: "all",
+//         });
+//
+//     function swapInfosClass() {
+//         currentInfoEl.classList.remove("current--info");
+//         previousInfoEl.classList.remove("previous--info");
+//         nextInfoEl.classList.remove("next--info");
+//
+//         if (direction === "right") {
+//             currentInfoEl.classList.add("previous--info");
+//             nextInfoEl.classList.add("current--info");
+//             previousInfoEl.classList.add("next--info");
+//         } else if (direction === "left") {
+//             currentInfoEl.classList.add("next--info");
+//             nextInfoEl.classList.add("previous--info");
+//             previousInfoEl.classList.add("current--info");
+//         }
+//     }
+// }
 
 function updateCard(e) {
     const card = e.currentTarget;
@@ -145,21 +145,21 @@ function updateCard(e) {
     gsap.set(card, {
         "--current-card-rotation-offset": `${angle}deg`,
     });
-    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-    gsap.set(currentInfoEl, {
+    // const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+/*    gsap.set(currentInfoEl, {
         rotateY: `${angle}deg`,
-    });
+    });*/
 }
 
 function resetCardTransforms(e) {
     const card = e.currentTarget;
-    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+    // const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
     gsap.set(card, {
         "--current-card-rotation-offset": 0,
     });
-    gsap.set(currentInfoEl, {
+/*    gsap.set(currentInfoEl, {
         rotateY: 0,
-    });
+    });*/
 }
 
 function initCardEvents() {
@@ -190,13 +190,13 @@ function init() {
         },
         "--card-translateY-offset": "0%",
     })
-        .to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
+/*        .to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
             delay: 0.5,
             duration: 0.4,
             stagger: 0.1,
             opacity: 1,
             translateY: 0,
-        })
+        })*/
         .to(
             [buttons.prev, buttons.next],
             {
@@ -217,10 +217,10 @@ const waitForImages = () => {
     gsap.set(cardsContainerEl.children, {
         "--card-translateY-offset": "100vh",
     });
-    gsap.set(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
+/*    gsap.set(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
         translateY: "40px",
         opacity: 0,
-    });
+    });*/
     gsap.set([buttons.prev, buttons.next], {
         pointerEvents: "none",
         opacity: "0",
