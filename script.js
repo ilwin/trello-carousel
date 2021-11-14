@@ -1,5 +1,5 @@
 import {top_250_movies} from "./top_250_movies.mjs";
-console.clear();
+// console.clear();
 
 const { gsap, imagesLoaded } = window;
 
@@ -105,7 +105,7 @@ class Carousel {
             currentCardEl.style.zIndex = "50";
 
             if (direction === "right") {
-                context.currentIndex = (this.currentIndex + 1) % this.slides.length;
+                context.currentIndex = (context.currentIndex + 1) % context.slides.length;
                 previousCardEl.style.zIndex = "20";
                 nextCardEl.style.zIndex = "30";
                 currentCardEl.classList.add("previous--card");
@@ -115,11 +115,11 @@ class Carousel {
                 previousPreviousCardEl.classList.add("hidden--card");
                 //loop through all.At the end just to start
                 const newPreviousPreviousCardEl = document.getElementById(
-                    `card-${(this.currentIndex + 2) % this.slides.length || this.currentIndex + 2}`)
+                    `card-${(context.currentIndex + 2) % context.slides.length || context.currentIndex + 2}`)
                 newPreviousPreviousCardEl.classList.remove("hidden--card");
                 newPreviousPreviousCardEl.classList.add("next-next--card");
             } else if (direction === "left") {
-                this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+                context.currentIndex = (context.currentIndex - 1 + context.slides.length) % context.slides.length;
 
                 if (previousCardEl) {
                     previousCardEl.style.zIndex = "30";
@@ -135,7 +135,7 @@ class Carousel {
                 nextNextCardEl.classList.add("hidden--card");
                 //loop through all.At the end just to start
                 const newPreviousPreviousCardEl = document.getElementById(
-                    `card-${(this.currentIndex - 2 + this.slides.length) % this.slides.length || this.slides.length}`)
+                    `card-${(context.currentIndex - 2 + context.slides.length) % context.slides.length || context.slides.length}`)
                 newPreviousPreviousCardEl.classList.remove("hidden--card");
                 newPreviousPreviousCardEl.classList.add("previous-previous--card");
             }
