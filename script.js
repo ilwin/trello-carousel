@@ -49,8 +49,6 @@ class Carousel {
     }
 
     buildSlidesHtml(slides) {
-
-        const carousel = document.querySelector('.cards__wrapper');
         slides.map((slide, index) => {
             const divCard = document.createElement("div");
             const classById = {
@@ -78,67 +76,71 @@ class Carousel {
             img.setAttribute("src", slide.image);
             img.setAttribute("alt", "");
 
-
             divCardImage.append(img);
             divCard.append(divCardImage);
-            carousel.append(divCard);
+            this.cardsContainerEl.append(divCard);
         });
     }
 
+    selectCurrentlyActiveSlides() {
+        this.currentCardEl = this.cardsContainerEl.querySelector(".current--card");
+        this.previousCardEl = this.cardsContainerEl.querySelector(".previous--card");
+        this.previousPreviousCardEl = this.cardsContainerEl.querySelector(".previous-previous--card");
+        this.nextCardEl = this.cardsContainerEl.querySelector(".next--card");
+        this.nextNextCardEl = this.cardsContainerEl.querySelector(".next-next--card");
+    }
+
+    removeClassesFromActiveSlides() {
+        this.currentCardEl.classList.remove("current--card");
+        this.previousCardEl.classList.remove("previous--card");
+        this.nextCardEl.classList.remove("next--card");
+        this.previousPreviousCardEl.classList.remove("previous-previous--card");
+        this.nextNextCardEl.classList.remove("next-next--card");
+    }
+
     swapCards(direction) {
-        let currentCardEl = this.cardsContainerEl.querySelector(".current--card");
-        let previousCardEl = this.cardsContainerEl.querySelector(".previous--card");
-        let previousPreviousCardEl = this.cardsContainerEl.querySelector(".previous-previous--card");
-        let nextCardEl = this.cardsContainerEl.querySelector(".next--card");
-        let nextNextCardEl = this.cardsContainerEl.querySelector(".next-next--card");
-        let context = this;
-        swapCardsClass();
+        this.selectCurrentlyActiveSlides();
+        this.removeClassesFromActiveSlides();
+        this.swapCardsClass(direction);
+    }
 
-        function swapCardsClass() {
-            currentCardEl.classList.remove("current--card");
-            previousCardEl && previousCardEl.classList.remove("previous--card");
-            nextCardEl && nextCardEl.classList.remove("next--card");
-            previousPreviousCardEl && previousPreviousCardEl.classList.remove("previous-previous--card");
-            nextNextCardEl.classList.remove("next-next--card");
+    swapCardsClass(direction) {
+        this.currentCardEl.style.zIndex = "50";
 
+        if (direction === "right") {
+            this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+            this.previousCardEl.style.zIndex = "20";
+            this.nextCardEl.style.zIndex = "30";
+            this.currentCardEl.classList.add("previous--card");
+            this.previousCardEl.classList.add("previous-previous--card");
+            this.nextCardEl.classList.add("current--card");
+            this.nextNextCardEl.classList.add("next--card");
+            this.previousPreviousCardEl.classList.add("hidden--card");
+            //loop through all.At the end just to start
+            const newPreviousPreviousCardEl = document.getElementById(
+                `card-${(this.currentIndex + 2) % this.slides.length || this.currentIndex + 2}`)
+            newPreviousPreviousCardEl.classList.remove("hidden--card");
+            newPreviousPreviousCardEl.classList.add("next-next--card");
+        } else if (direction === "left") {
+            this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
 
-            currentCardEl.style.zIndex = "50";
-
-            if (direction === "right") {
-                context.currentIndex = (context.currentIndex + 1) % context.slides.length;
-                previousCardEl.style.zIndex = "20";
-                nextCardEl.style.zIndex = "30";
-                currentCardEl.classList.add("previous--card");
-                previousCardEl.classList.add("previous-previous--card");
-                nextCardEl.classList.add("current--card");
-                nextNextCardEl.classList.add("next--card");
-                previousPreviousCardEl.classList.add("hidden--card");
-                //loop through all.At the end just to start
-                const newPreviousPreviousCardEl = document.getElementById(
-                    `card-${(context.currentIndex + 2) % context.slides.length || context.currentIndex + 2}`)
-                newPreviousPreviousCardEl.classList.remove("hidden--card");
-                newPreviousPreviousCardEl.classList.add("next-next--card");
-            } else if (direction === "left") {
-                context.currentIndex = (context.currentIndex - 1 + context.slides.length) % context.slides.length;
-
-                if (previousCardEl) {
-                    previousCardEl.style.zIndex = "30";
-                }
-                if (nextCardEl) {
-                    nextCardEl.style.zIndex = "20";
-                }
-
-                currentCardEl.classList.add("next--card");
-                previousCardEl.classList.add("current--card");
-                nextCardEl.classList.add("next-next--card");
-                previousPreviousCardEl.classList.add("previous--card");
-                nextNextCardEl.classList.add("hidden--card");
-                //loop through all.At the end just to start
-                const newPreviousPreviousCardEl = document.getElementById(
-                    `card-${(context.currentIndex - 2 + context.slides.length) % context.slides.length || context.slides.length}`)
-                newPreviousPreviousCardEl.classList.remove("hidden--card");
-                newPreviousPreviousCardEl.classList.add("previous-previous--card");
+            if (this.previousCardEl) {
+                this.previousCardEl.style.zIndex = "30";
             }
+            if (this.nextCardEl) {
+                this.nextCardEl.style.zIndex = "20";
+            }
+
+            this.currentCardEl.classList.add("next--card");
+            this.previousCardEl.classList.add("current--card");
+            this.nextCardEl.classList.add("next-next--card");
+            this.previousPreviousCardEl.classList.add("previous--card");
+            this.nextNextCardEl.classList.add("hidden--card");
+            //loop through all.At the end just to start
+            const newPreviousPreviousCardEl = document.getElementById(
+                `card-${(this.currentIndex - 2 + this.slides.length) % this.slides.length || this.slides.length}`)
+            newPreviousPreviousCardEl.classList.remove("hidden--card");
+            newPreviousPreviousCardEl.classList.add("previous-previous--card");
         }
     }
 
