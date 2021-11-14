@@ -39,8 +39,8 @@ class Carousel {
             prev: document.querySelector(".btn--left"),
             next: document.querySelector(".btn--right"),
         };
-        this.buttons.next.addEventListener("click", () => this.swapCards("right"));
-        this.buttons.prev.addEventListener("click", () => this.swapCards("left"));
+        this.buttons.next.addEventListener("click", () => this.swapCards(1));
+        this.buttons.prev.addEventListener("click", () => this.swapCards(-1));
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
 
@@ -98,16 +98,22 @@ class Carousel {
         this.nextNextCardEl.classList.remove("next-next--card");
     }
 
-    swapCards(direction) {
-        this.selectCurrentlyActiveSlides();
-        this.removeClassesFromActiveSlides();
-        this.swapCardsClass(direction);
+    swapCards(shiftSlidesCount) {
+        const shiftSlidesCountAbs = Math.abs(shiftSlidesCount);
+
+        for(let i = 0; i < shiftSlidesCountAbs; i++) {
+            ((i)=>setTimeout(() => this.swapCardsClass(Math.sign(shiftSlidesCount))
+                ,300 * i)
+            )(i);
+        }
     }
 
-    swapCardsClass(direction) {
+    swapCardsClass(shiftSlidesCount) {
+        this.selectCurrentlyActiveSlides();
+        this.removeClassesFromActiveSlides();
         this.currentCardEl.style.zIndex = "50";
 
-        if (direction === "right") {
+        if (shiftSlidesCount === 1) {
             this.currentIndex = (this.currentIndex + 1) % this.slides.length;
             this.previousCardEl.style.zIndex = "20";
             this.nextCardEl.style.zIndex = "30";
@@ -121,7 +127,7 @@ class Carousel {
                 `card-${(this.currentIndex + 2) % this.slides.length || this.currentIndex + 2}`)
             newPreviousPreviousCardEl.classList.remove("hidden--card");
             newPreviousPreviousCardEl.classList.add("next-next--card");
-        } else if (direction === "left") {
+        } else if (shiftSlidesCount === -1) {
             this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
 
             if (this.previousCardEl) {
