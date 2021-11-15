@@ -44,7 +44,7 @@ class Carousel {
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
 
-        this.autoScrollFlag = true;
+        this.autoScrollFlag = false;
         this.autoScrollInterval = 3000;
         this.autoScrollIntervalFunc = null;
 
@@ -185,7 +185,7 @@ class Carousel {
                 from: "left",
                 amount: 0.1,
             },
-            "--card-translateY-offset": "0%",
+            "--card-translateY-offset": "50%",
         })
             .to(
                 [this.buttons.prev, this.buttons.next],
@@ -203,9 +203,6 @@ class Carousel {
         const totalImages = images.length;
         let loadedImages = 0;
         const loaderEl = document.querySelector(".loader span");
-        gsap.set(this.cardsContainerEl.children, {
-            "--card-translateY-offset": "100vh",
-        });
 
         gsap.set([this.buttons.prev, this.buttons.next], {
             pointerEvents: "none",

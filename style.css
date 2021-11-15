@@ -97,7 +97,7 @@ button:focus {
 .cardList {
   position: absolute;
   width: calc(3 * var(--card-width));
-  height: auto;
+  height: calc(1 * var(--card-height));
 }
 .cardList__btn {
   --btn-size: 35px;
@@ -131,8 +131,8 @@ button:focus {
 
 .card {
   position: absolute;
-  left: 50%;
-  top: -50%;
+  left: 33%;
+  top: 0%;
   transform: translate(-50%, -50%) translateX(var(--card-translateX-offset)) translateY(var(--card-translateY-offset)) rotateY(var(--card-rotation-offset)) scale(var(--card-scale-offset));
   display: inline-block;
   width: var(--card-width);
@@ -155,18 +155,22 @@ button:focus {
 }
 .card.current--card {
   --current-card-rotation-offset: 0;
-  --card-translateX-offset: 0;
+  --card-translateX-offset: 50%;
   --card-rotation-offset: var(--current-card-rotation-offset);
   --card-scale-offset: 1.2;
   --opacity: 0.8;
 }
 .card.previous--card, .card.previous-previous--card {
-  --card-translateX-offset: calc(-1 * var(--card-width) * 1.1);
+  --card-translateX-offset: calc(var(--card-width) * -0.6);
   --card-rotation-offset: 25deg;
 }
-.card.next--card, .card.next-next--card {
-  --card-translateX-offset: calc(var(--card-width) * 1.1);
+.card.next--card {
+  --card-translateX-offset: calc(var(--card-width) * 1.6);
   --card-rotation-offset: -25deg;
+}
+.card.next-next--card {
+  visibility: hidden;
+  transition: visibility 1000ms;
 }
 .card.previous--card, .card.next--card {
   --card-scale-offset: 0.9;
@@ -174,6 +178,7 @@ button:focus {
 }
 .card.previous-previous--card, .card.next-next--card, .card.hidden--card {
   visibility: hidden;
+  transition: visibility 1000ms;
 }
 
 .loading__wrapper {
