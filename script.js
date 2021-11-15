@@ -44,8 +44,15 @@ class Carousel {
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
 
+        this.autoScrollFlag = true;
+        this.autoScrollInterval = 3000;
+
         this.buildSlidesHtml(this.slides);
         this.waitForImages();
+
+        if(this.autoScrollFlag) {
+            this.autoScroll();
+        }
     }
 
     buildSlidesHtml(slides) {
@@ -80,6 +87,10 @@ class Carousel {
             divCard.append(divCardImage);
             this.cardsContainerEl.append(divCard);
         });
+    }
+
+    autoScroll(shiftSlidesCount = 1) {
+        setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
     }
 
     selectCurrentlyActiveSlides() {
@@ -158,18 +169,11 @@ class Carousel {
             duration: 0.5,
             stagger: {
                 ease: "power4.inOut",
-                from: "right",
+                from: "left",
                 amount: 0.1,
             },
             "--card-translateY-offset": "0%",
         })
-            /*        .to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
-                        delay: 0.5,
-                        duration: 0.4,
-                        stagger: 0.1,
-                        opacity: 1,
-                        translateY: 0,
-                    })*/
             .to(
                 [this.buttons.prev, this.buttons.next],
                 {

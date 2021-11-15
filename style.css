@@ -2,7 +2,7 @@
 :root {
   --card-width: 200px;
   --card-height: 300px;
-  --card-transition-duration: 800ms;
+  --card-transition-duration: 1000ms;
   --card-transition-easing: ease;
 }
 
