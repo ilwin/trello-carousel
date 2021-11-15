@@ -39,19 +39,36 @@ class Carousel {
             prev: document.querySelector(".btn--left"),
             next: document.querySelector(".btn--right"),
         };
-        this.buttons.next.addEventListener("click", () => this.swapCards(1));
-        this.buttons.prev.addEventListener("click", () => this.swapCards(-1));
+        this.buttons.next.addEventListener("click", () => this.scrollButtonOnClick(1));
+        this.buttons.prev.addEventListener("click", () => this.scrollButtonOnClick(-1));
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
 
         this.autoScrollFlag = true;
         this.autoScrollInterval = 3000;
+        this.autoScrollIntervalFunc = null;
 
         this.buildSlidesHtml(this.slides);
         this.waitForImages();
 
         if(this.autoScrollFlag) {
             this.autoScroll();
+        }
+    }
+
+    scrollButtonOnClick(shiftSlidesCount){
+        this.cancelAutoscroll();
+        this.swapCards(shiftSlidesCount);
+    }
+
+    autoScroll(shiftSlidesCount = 1) {
+        this.autoScrollIntervalFunc = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
+    }
+
+    cancelAutoscroll() {
+        if(this.autoScrollIntervalFunc) {
+            clearInterval(this.autoScrollIntervalFunc);
+            this.autoScrollIntervalFunc = null;
         }
     }
 
@@ -87,10 +104,6 @@ class Carousel {
             divCard.append(divCardImage);
             this.cardsContainerEl.append(divCard);
         });
-    }
-
-    autoScroll(shiftSlidesCount = 1) {
-        setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
     }
 
     selectCurrentlyActiveSlides() {
