@@ -199,7 +199,7 @@ class Carousel {
     }
 
     waitForImages = () => {
-        const images = [...document.querySelectorAll("img")];
+        const images = [...document.querySelectorAll("div.card:not(.hidden--card)")];
         const totalImages = images.length;
         let loadedImages = 0;
         const loaderEl = document.querySelector(".loader span");
