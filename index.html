@@ -11,6 +11,16 @@
 <div class="app">
 
     <div class="cardList">
+        <div class="cards__wrapper"></div>
+
+        <button class="cardList__btn btn btn--left-fast">
+            <div class="icon">
+                <svg>
+                    <use xlink:href="#arrow-left-fast"></use>
+                </svg>
+            </div>
+        </button>
+
         <button class="cardList__btn btn btn--left">
             <div class="icon">
                 <svg>
@@ -19,8 +29,6 @@
             </div>
         </button>
 
-        <div class="cards__wrapper"></div>
-
         <button class="cardList__btn btn btn--right">
             <div class="icon">
                 <svg>
@@ -28,6 +36,15 @@
                 </svg>
             </div>
         </button>
+
+        <button class="cardList__btn btn btn--right-fast">
+            <div class="icon">
+                <svg>
+                    <use xlink:href="#arrow-right-fast"></use>
+                </svg>
+            </div>
+        </button>
+
     </div>
 
     <div class="app__bg">
@@ -56,10 +73,23 @@
         <polyline points='328 112 184 256 328 400'
                   style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
     </symbol>
+    <symbol id="arrow-left-fast" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+        <polyline points='328 112 184 256 328 400'
+                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+        <polyline points='184 112 0 256 184 400'
+                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+    </symbol>
     <symbol id="arrow-right" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
         <polyline points='184 112 328 256 184 400'
                   style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
     </symbol>
+    <symbol id="arrow-right-fast" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+        <polyline points='184 112 328 256 184 400'
+                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+        <polyline points='328 112 510 256 328 400'
+                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+    </symbol>
+
 </svg>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>

@@ -99,6 +99,7 @@ class Carousel {
             const img = document.createElement("img");
             img.setAttribute("src", slide.image);
             img.setAttribute("alt", "");
+            img.setAttribute("loading", "lazy");
 
             divCardImage.append(img);
             divCard.append(divCardImage);
@@ -177,9 +178,10 @@ class Carousel {
     init() {
         let tl = gsap.timeline();
 
-        tl.to(this.cardsContainerEl.children, {
-            delay: 0.15,
-            duration: 0.5,
+        tl
+            .to(this.cardsContainerEl.children, {
+            delay: 0,
+            duration: 0,
             stagger: {
                 ease: "power4.inOut",
                 from: "left",
@@ -203,11 +205,6 @@ class Carousel {
         const totalImages = images.length;
         let loadedImages = 0;
         const loaderEl = document.querySelector(".loader span");
-
-        gsap.set([this.buttons.prev, this.buttons.next], {
-            pointerEvents: "none",
-            opacity: "0",
-        });
 
         images.forEach((image) => {
             imagesLoaded(image, (instance) => {

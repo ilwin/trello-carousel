@@ -3,7 +3,7 @@
   --card-width: 200px;
   --card-height: 300px;
 
-  --card-transition-duration: 1000ms;
+  --card-transition-duration: 300ms;
   --card-transition-easing: ease;
 }
 
@@ -110,15 +110,23 @@ button {
     width: var(--btn-size);
     height: var(--btn-size);
     position: absolute;
-    top: 50%;
+    top: 100%;
     transform: translateY(-50%);
     z-index: 100;
 
     &.btn--left {
-      left: -5%;
+      left: 15%;
     }
+    &.btn--left-fast {
+      left: 0%;
+    }
+
     &.btn--right {
-      right: -5%;
+      right: 15%;
+    }
+
+    &.btn--right-fast {
+      right: 0%;
     }
 
     .icon {
@@ -197,7 +205,6 @@ button {
     visibility:hidden;
     transition:visibility 1000ms;
   }
-
 }
 
 .loading__wrapper {
