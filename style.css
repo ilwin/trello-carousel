@@ -22,10 +22,6 @@ body {
   overflow: hidden;
 }
 
-div {
-  border: 1px solid lightslategrey !important;
-}
-
 button {
   border: none;
   background: none;
@@ -160,17 +156,13 @@ button:focus {
   --card-scale-offset: 1.2;
   --opacity: 0.8;
 }
-.card.previous--card, .card.previous-previous--card {
+.card.previous--card {
   --card-translateX-offset: calc(var(--card-width) * -0.6);
   --card-rotation-offset: 25deg;
 }
 .card.next--card {
   --card-translateX-offset: calc(var(--card-width) * 1.6);
   --card-rotation-offset: -25deg;
-}
-.card.next-next--card {
-  visibility: hidden;
-  transition: visibility 1000ms;
 }
 .card.previous--card, .card.next--card {
   --card-scale-offset: 0.9;
