@@ -103,14 +103,14 @@ button {
 .cardList {
   position: absolute;
   width: calc(3 * var(--card-width));
-  height: calc(1 * var(--card-height));;
+  height: calc(1.3 * var(--card-height));;
 
   &__btn {
     --btn-size: 35px;
     width: var(--btn-size);
     height: var(--btn-size);
     position: absolute;
-    top: 110%;
+    top: 115%;
     transform: translateY(-50%);
     z-index: 100;
 
@@ -138,6 +138,50 @@ button {
       }
     }
   }
+
+  &__customControls {
+    position: absolute;
+    top: 113%;
+    left: 30%;
+    display: flex;
+    flex-direction: row;
+
+    & > div {
+      margin: 0 10px;
+    }
+
+    &__autoplay {
+      //position: absolute;
+      //top:114%;
+      //left: 23%;
+      color: white;
+      display: flex;
+      align-items: center;
+      border: 1px solid gray;
+      padding: 2px;
+      #autoscroll-duration {
+        width: 25px;
+        text-align: center;
+      }
+      label {
+        margin-right: 30px;
+      }
+    }
+
+    &__goto {
+      //position: absolute;
+      //top:114%;
+      //left: 55%;
+      color: white;
+      border: 1px solid gray;
+      padding: 2px;
+      #goto {
+        width: 35px;
+        text-align: center;
+      }
+    }
+  }
+
 
   .cards__wrapper {
     position: relative;
@@ -176,13 +220,19 @@ button {
   }
 
   &__info {
-    z-index: 200;
     color: white;
     text-align: center;
     position: absolute;
-    top: -7%;
-    left: 46%;
+    top: 90%;
+    left: 45%;
     font-size: 1em;
+    z-index: 1;
+    opacity: 0.4;
+    font-size: 24px;
+    border: 1px solid gray;
+    padding: 4px;
+    background-color: black;
+    text-shadow: 1px 1px #fdff00;
   }
 
   &.current--card {
@@ -191,8 +241,21 @@ button {
     --card-rotation-offset: var(--current-card-rotation-offset);
     --card-scale-offset: 1.2;
     --opacity: 0.8;
+    z-index: 100;
+
+    .card__info {
+      z-index: 100;
+    }
+
   }
 
+  &.previous--card,
+  &.next--card {
+    z-index: 99;
+    .card__info {
+      z-index: 99;
+    }
+  }
   &.previous--card {
     --card-translateX-offset: calc(var(--card-width) * -0.6);
     --card-rotation-offset: 25deg;
@@ -210,10 +273,14 @@ button {
   }
 
   &.previous-previous--card,
-  &.next-next--card,
-  &.hidden--card{
+  &.next-next--card {
+
+  }
+
+  &.hidden--card,
+  &.previous-previous--card,
+  &.next-next--card {
     visibility:hidden;
-    transition:visibility 1000ms;
   }
 }
 
@@ -257,24 +324,6 @@ button {
   :root {
     --card-width: 250px;
     --card-height: 400px;
-  }
-}
-
-.support {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  padding: 10px;
-  display: flex;
-  a {
-    margin: 0 10px;
-    color: #fff;
-    font-size: 1.8rem;
-    backface-visibility: hidden;
-    transition: all 150ms ease;
-    &:hover {
-      transform: scale(1.1);
-    }
   }
 }
 

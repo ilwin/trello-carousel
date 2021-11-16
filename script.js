@@ -1,9 +1,6 @@
-import {top_250_movies} from "./top_250_movies.mjs";
-// console.clear();
-
 const { gsap, imagesLoaded } = window;
 
-class Carousel {
+export class Carousel {
     constructor(options) {
         let hasCorrectSlides = false;
         if (!options.hasOwnProperty("slides")) {
@@ -40,30 +37,72 @@ class Carousel {
             next: document.querySelector(".btn--right"),
             prevFast: document.querySelector(".btn--left-fast"),
             nextFast: document.querySelector(".btn--right-fast"),
+            autoplay: document.querySelector('#autoplay-checkbox')
         };
 
+        this.inputs = {
+            autoplayDuration: document.querySelector("#autoscroll-duration"),
+            goto: document.querySelector("#goto")
+        }
+
         this.autoScrollFlag = false;
-        this.autoScrollInterval = 3000;
+        this.autoScrollInterval = 1000;
         this.autoScrollIntervalFunc = null;
+        this.autoScrollDurationSeconds = 5;
         this.slowScrolling = 300;
         this.fastScrolling = 100;
+        this.immidiateScrolling = 0;
+        this.fastScrollingStep = 5;
 
-        this.buttons.next.addEventListener("click", () => this.swapCards(1, this.slowScrolling));
-        this.buttons.prev.addEventListener("click", () => this.swapCards(-1, this.slowScrolling));
-        this.buttons.nextFast.addEventListener("click", () => this.swapCards(5, this.fastScrolling));
-        this.buttons.prevFast.addEventListener("click", () => this.swapCards(-5, this.fastScrolling));
+        this.buttons.next.addEventListener("click", () => {
+            this.cancelAutoscroll();
+            this.swapCards(1, this.slowScrolling);
+        });
+        this.buttons.prev.addEventListener("click", () => {
+            this.cancelAutoscroll();
+            this.swapCards(-1, this.slowScrolling);
+        });
+        this.buttons.nextFast.addEventListener("click", () => {
+            this.cancelAutoscroll();
+            this.swapCards(this.fastScrollingStep, this.fastScrolling);
+        });
+        this.buttons.prevFast.addEventListener("click", () => {
+            this.cancelAutoscroll();
+            this.swapCards(-this.fastScrollingStep, this.fastScrolling);
+        });
+        this.buttons.autoplay.addEventListener("change", (event) => {
+            if(event.target.checked) {
+                this.autoScrollFlag = true;//Click on Manual scrolling cancels autoplay
+                this.autoScroll();
+            } else {
+                this.autoScrollFlag = false;
+                this.cancelAutoscroll();
+            };
+        })
+        this.buttons.autoplay.checked = false;
+        this.inputs.autoplayDuration.value = this.autoScrollDurationSeconds;
+        this.inputs.autoplayDuration.addEventListener("change", (event) => {
+            this.autoScrollDuration = parseInt(event.target.value);
+            event.target.value = parseInt(event.target.value);
+            this.cancelAutoscroll();
+            this.autoScrollFlag = true;
+            this.autoScroll();
+        });
+        this.inputs.goto.addEventListener('change', (event) => {
+            const goto = Math.abs(parseInt(event.target.value));
+            const jumpSize = Math.abs(goto - this.currentIndex);
+            const direction = Math.sign(goto - this.currentIndex);
+            this.cancelAutoscroll();
+            this.swapCards(direction * jumpSize, this.immidiateScrolling);
+        })
 
-        document.addEventListener('keydown', (e) => this.onKeyDown(e));
+        document.addEventListener('keydown', (event) => this.onKeyDown(event));
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
 
         this.buildSlidesHtml(this.slides);
         this.waitForImages();
-
-        if(this.autoScrollFlag) {
-            this.autoScroll();
-        }
-
+        this.autoScroll();
     }
 
     buildSlidesHtml(slides) {
@@ -106,25 +145,29 @@ class Carousel {
         });
     }
 
-    onKeyDown(e) {
-        switch(e.code){
+    autoScroll(shiftSlidesCount = 1) {
+        if(this.autoScrollFlag) {
+            this.buttons.autoplay.checked = true;
+            this.autoScrollIntervalFunc = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
+            setTimeout(() => this.cancelAutoscroll(), this.autoScrollDurationSeconds * 1000)
+        }
+    }
+
+    cancelAutoscroll() {
+        this.autoScrollFlag = false;
+        this.autoScrollIntervalFunc && clearInterval(this.autoScrollIntervalFunc);
+        this.autoScrollIntervalFunc = null;
+        this.buttons.autoplay.checked = false;
+    }
+
+    onKeyDown(event) {
+        switch(event.code){
             case "ArrowLeft":
                 this.swapCards(1, this.slowScrolling);
                 break;
             case "ArrowRight":
                 this.swapCards(-1, this.slowScrolling);
                 break;
-        }
-    }
-
-    autoScroll(shiftSlidesCount = 1) {
-        this.autoScrollIntervalFunc = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
-    }
-
-    cancelAutoscroll() {
-        if(this.autoScrollIntervalFunc) {
-            clearInterval(this.autoScrollIntervalFunc);
-            this.autoScrollIntervalFunc = null;
         }
     }
 
@@ -144,8 +187,7 @@ class Carousel {
         this.nextNextCardEl.classList.remove("next-next--card");
     }
 
-    swapCards(shiftSlidesCount, scrollSpeed) {
-        this.cancelAutoscroll();
+    swapCards(shiftSlidesCount=1, scrollSpeed=this.autoScrollInterval) {
         const shiftSlidesCountAbs = Math.abs(shiftSlidesCount);
 
         for(let i = 0; i < shiftSlidesCountAbs; i++) {
@@ -256,5 +298,3 @@ class Carousel {
 
 
 }
-
-new Carousel({slides: top_250_movies});

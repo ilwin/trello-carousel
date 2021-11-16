@@ -150,7 +150,8 @@ export const top_250_movies = [{
             "crew": "Irvin Kershner (dir.), Mark Hamill, Harrison Ford",
             "imDbRating": "8.7",
             "imDbRatingCount": "1212384"
-        }, {
+        },
+        /*{
             "id": "tt0133093",
             "rank": "16",
             "title": "The Matrix",
@@ -2500,5 +2501,5 @@ export const top_250_movies = [{
             "crew": "Zaza Urushadze (dir.), Lembit Ulfsak, Elmo Nüganen",
             "imDbRating": "8.0",
             "imDbRatingCount": "44509"
-        }
+        }*/
     ];
