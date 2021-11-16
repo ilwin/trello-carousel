@@ -95,8 +95,13 @@ class Carousel {
             img.setAttribute("alt", "");
             img.setAttribute("loading", "lazy");
 
+            const info = document.createElement("div");
+            info.setAttribute("class", "card__info");
+            info.textContent = `#${index+1}`;
+
             divCardImage.append(img);
             divCard.append(divCardImage);
+            divCard.append(info);
             this.cardsContainerEl.append(divCard);
         });
     }
