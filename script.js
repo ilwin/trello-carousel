@@ -109,9 +109,11 @@ class Carousel {
     onKeyDown(e) {
         switch(e.code){
             case "ArrowLeft":
-            this.swapCards(1, this.slowScrolling);
+                this.swapCards(1, this.slowScrolling);
+                break;
             case "ArrowRight":
-            this.swapCards(-1, this.slowScrolling);
+                this.swapCards(-1, this.slowScrolling);
+                break;
         }
     }
 
