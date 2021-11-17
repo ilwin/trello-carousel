@@ -8,95 +8,26 @@
 </head>
 <body>
 
-<div class="app">
-
-    <div class="cardList">
-        <div class="cards__wrapper"></div>
-
-        <button class="cardList__btn btn btn--left">
-            <div class="icon">
-                <svg>
-                    <use xlink:href="#arrow-left"></use>
-                </svg>
-            </div>
-        </button>
-        <div class="cardList__customControls">
-            <div class="cardList__customControls__autoplay">
-                <input id="autoplay-checkbox" type="checkbox" />
-                <label for="autoplay-checkbox">Autoplay</label>
-                <input id="autoscroll-duration" type="text" />
-                <span>sec</span>
-            </div>
-            <div class="cardList__customControls__goto">
-                <label for="goto">Jump to #</label>
-                <input id="goto" type="text" />
-            </div>
-        </div>
-
-        <button class="cardList__btn btn btn--right">
-            <div class="icon">
-                <svg>
-                    <use xlink:href="#arrow-right"></use>
-                </svg>
-            </div>
-        </button>
-
-    </div>
-
-    <div class="app__bg">
-        <div class="app__bg__image current--image">
-            <img src="https://source.unsplash.com/Z8dtTatMVMw" alt="" />
-        </div>
-        <div class="app__bg__image next--image">
-            <img src="https://source.unsplash.com/9dmycbFE7mQ" alt="" />
-        </div>
-        <div class="app__bg__image previous--image">
-            <img src="https://source.unsplash.com/m7K4KzL5aQ8" alt="" />
-        </div>
-    </div>
-</div>
-
-<div class="loading__wrapper">
-    <div class="loader--text">Loading...</div>
-    <div class="loader">
-        <span></span>
-    </div>
-</div>
-
-
-<svg class="icons" style="display: none;">
-    <symbol id="arrow-left" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
-        <polyline points='328 112 184 256 328 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-    </symbol>
-    <symbol id="arrow-left-fast" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
-        <polyline points='328 112 184 256 328 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-        <polyline points='184 112 50 256 184 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-    </symbol>
-    <symbol id="arrow-right" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
-        <polyline points='184 112 328 256 184 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-    </symbol>
-    <symbol id="arrow-right-fast" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
-        <polyline points='184 112 328 256 184 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-        <polyline points='328 112 480 256 328 400'
-                  style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-    </symbol>
-
-</svg>
+<div id="carousel1" class="carousel"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
-<!--<script type="module" src="main.js"></script>-->
-
+<script type="module" scr="./carousel.js" ></script>
 <script type="module">
-    import { Carousel } from "./script.js";
-    import {top_250_movies} from "./top_250_movies.mjs";
-    new Carousel({slides: top_250_movies});
+    import {top_250_movies} from "./top_250_movies.js";
+    import Carousel from "./carousel.js";
+    document.addEventListener('DOMContentLoaded', () => {
+        new Carousel({
+            slides: top_250_movies,
+            containerId: 'carousel1'
+        });
+        new Carousel({
+            slides: top_250_movies,
+            containerId: 'carousel2'
+        });
+
+    });
 </script>
 
 </body>

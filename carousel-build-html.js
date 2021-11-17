@@ -1,4 +1,5 @@
 export const buildSlidesHtml =  (slides) => {
+    const cardsContainerEl = document.querySelector(".cards__wrapper");
     slides.map((slide, index) => {
         const divCard = document.createElement("div");
         const classById = {
@@ -34,6 +35,6 @@ export const buildSlidesHtml =  (slides) => {
         divCardImage.append(img);
         divCard.append(divCardImage);
         divCard.append(info);
-        this.cardsContainerEl.append(divCard);
+        cardsContainerEl.append(divCard);
     });
 }
