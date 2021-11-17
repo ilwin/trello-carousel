@@ -13,14 +13,6 @@
     <div class="cardList">
         <div class="cards__wrapper"></div>
 
-        <button class="cardList__btn btn btn--left-fast">
-            <div class="icon">
-                <svg>
-                    <use xlink:href="#arrow-left-fast"></use>
-                </svg>
-            </div>
-        </button>
-
         <button class="cardList__btn btn btn--left">
             <div class="icon">
                 <svg>
@@ -41,7 +33,6 @@
             </div>
         </div>
 
-
         <button class="cardList__btn btn btn--right">
             <div class="icon">
                 <svg>
@@ -49,16 +40,6 @@
                 </svg>
             </div>
         </button>
-
-        <button class="cardList__btn btn btn--right-fast">
-            <div class="icon">
-                <svg>
-                    <use xlink:href="#arrow-right-fast"></use>
-                </svg>
-            </div>
-        </button>
-
-
 
     </div>
 
@@ -115,7 +96,6 @@
 <script type="module">
     import { Carousel } from "./script.js";
     import {top_250_movies} from "./top_250_movies.mjs";
-
     new Carousel({slides: top_250_movies});
 </script>
 

@@ -2,41 +2,13 @@ const { gsap, imagesLoaded } = window;
 
 export class Carousel {
     constructor(options) {
-        let hasCorrectSlides = false;
-        if (!options.hasOwnProperty("slides")) {
-            console.error("{slides: [{image: ...}, {image:...}] " +
-                "must be set and should be an array of objects with at least one property - 'image' - in every object");
-            console.info("Was received:", options)
-        } else if (!Array.isArray(options.slides)) {
-            console.error("{slides: ...} property must be Array")
-        } else if (options.slides.length === 0) {
-            console.error("The 'slides' object is empty")
-        } else {
-            let isCorrectCounter = 0;
-            options.slides.forEach((slide) => {
-                if (slide.hasOwnProperty('image')) {
-                    isCorrectCounter += 1;
-                }
-            })
-            if (isCorrectCounter === options.slides.length) {
-                hasCorrectSlides = true;
-                this.slides = options.slides;
-
-            } else {
-                console.error("Check that every object has property 'image'");
-            }
+        if(options.hasOwnProperty("slides")){
+            this.slides = options.slides;
         }
-        if (!hasCorrectSlides) {
-            return;
-        }
-
-        //The initial slides data is correct
         this.currentIndex = 1;
         this.buttons = {
             prev: document.querySelector(".btn--left"),
             next: document.querySelector(".btn--right"),
-            prevFast: document.querySelector(".btn--left-fast"),
-            nextFast: document.querySelector(".btn--right-fast"),
             autoplay: document.querySelector('#autoplay-checkbox')
         };
 
@@ -45,37 +17,28 @@ export class Carousel {
             goto: document.querySelector("#goto")
         }
 
-        this.autoScrollFlag = false;
+        this.isAutoScrollEnabled = false;
         this.autoScrollInterval = 1000;
-        this.autoScrollIntervalFunc = null;
+        this.autoScrollIntervalID = null;
         this.autoScrollDurationSeconds = 5;
-        this.slowScrolling = 300;
-        this.fastScrolling = 100;
-        this.immidiateScrolling = 0;
-        this.fastScrollingStep = 5;
+        this.nextSlideScrollDurarion = 300;
+        this.gotoSlideTimeout = 0;
 
         this.buttons.next.addEventListener("click", () => {
             this.cancelAutoscroll();
-            this.swapCards(1, this.slowScrolling);
+            this.swapCards(1, this.nextSlideScrollDurarion);
         });
         this.buttons.prev.addEventListener("click", () => {
             this.cancelAutoscroll();
-            this.swapCards(-1, this.slowScrolling);
+            this.swapCards(-1, this.nextSlideScrollDurarion);
         });
-        this.buttons.nextFast.addEventListener("click", () => {
-            this.cancelAutoscroll();
-            this.swapCards(this.fastScrollingStep, this.fastScrolling);
-        });
-        this.buttons.prevFast.addEventListener("click", () => {
-            this.cancelAutoscroll();
-            this.swapCards(-this.fastScrollingStep, this.fastScrolling);
-        });
+
         this.buttons.autoplay.addEventListener("change", (event) => {
             if(event.target.checked) {
-                this.autoScrollFlag = true;//Click on Manual scrolling cancels autoplay
+                this.isAutoScrollEnabled = true;//Click on Manual scrolling cancels autoplay
                 this.autoScroll();
             } else {
-                this.autoScrollFlag = false;
+                this.isAutoScrollEnabled = false;
                 this.cancelAutoscroll();
             };
         })
@@ -93,7 +56,7 @@ export class Carousel {
             const jumpSize = Math.abs(goto - this.currentIndex);
             const direction = Math.sign(goto - this.currentIndex);
             this.cancelAutoscroll();
-            this.swapCards(direction * jumpSize, this.immidiateScrolling);
+            this.swapCards(direction * jumpSize, this.gotoSlideTimeout);
         })
 
         document.addEventListener('keydown', (event) => this.onKeyDown(event));
@@ -146,27 +109,27 @@ export class Carousel {
     }
 
     autoScroll(shiftSlidesCount = 1) {
-        if(this.autoScrollFlag) {
+        if(this.isAutoScrollEnabled) {
             this.buttons.autoplay.checked = true;
-            this.autoScrollIntervalFunc = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
+            this.autoScrollIntervalID = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
             setTimeout(() => this.cancelAutoscroll(), this.autoScrollDurationSeconds * 1000)
         }
     }
 
     cancelAutoscroll() {
-        this.autoScrollFlag = false;
-        this.autoScrollIntervalFunc && clearInterval(this.autoScrollIntervalFunc);
-        this.autoScrollIntervalFunc = null;
+        this.isAutoScrollEnabled = false;
+        this.autoScrollIntervalID && clearInterval(this.autoScrollIntervalID);
+        this.autoScrollIntervalID = null;
         this.buttons.autoplay.checked = false;
     }
 
     onKeyDown(event) {
         switch(event.code){
             case "ArrowLeft":
-                this.swapCards(1, this.slowScrolling);
+                this.swapCards(1, this.nextSlideScrollDurarion);
                 break;
             case "ArrowRight":
-                this.swapCards(-1, this.slowScrolling);
+                this.swapCards(-1, this.nextSlideScrollDurarion);
                 break;
         }
     }
