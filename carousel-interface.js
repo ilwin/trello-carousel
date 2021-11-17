@@ -1,6 +1,6 @@
-export const carouselInitInterface = (id) => {
+export const carouselInitInterface = (props) => {
 
-    let carouselContainer = document.getElementById(id).innerHTML =
+        let content =
         '    <div class="cardList">\n' +
         '        <div class="cards__wrapper"></div>\n' +
         '\n' +
@@ -11,19 +11,28 @@ export const carouselInitInterface = (id) => {
         '                </svg>\n' +
         '            </div>\n' +
         '        </button>\n' +
-        '        <div class="cardList__customControls">\n' +
+        '        <div class="cardList__customControls">\n';
+
+        content +=
+            props.showAutoPlay ?
         '            <div class="cardList__customControls__autoplay">\n' +
         '                <input id="autoplay-checkbox" type="checkbox" />\n' +
         '                <label for="autoplay-checkbox">Autoplay</label>\n' +
         '                <input id="autoscroll-duration" type="text" />\n' +
         '                <span>sec</span>\n' +
-        '            </div>\n' +
+        '            </div>\n'
+            : '' ;
+
+        content +=
+            props.showGoto ?
         '            <div class="cardList__customControls__goto">\n' +
         '                <label for="goto">Jump to #</label>\n' +
         '                <input id="goto" type="text" />\n' +
-        '            </div>\n' +
+        '            </div>\n'
+        : '';
+
+        content +=
         '        </div>\n' +
-        '\n' +
         '        <button class="cardList__btn btn btn--right">\n' +
         '            <div class="icon">\n' +
         '                <svg>\n' +
@@ -62,4 +71,6 @@ export const carouselInitInterface = (id) => {
         '                  style=\'fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px\' />\n' +
         '    </symbol>\n' +
         '</svg>';
+
+    document.getElementById(props.containerId).innerHTML = content;
 }

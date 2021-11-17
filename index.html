@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div id="carousel1" class="carousel"></div>
+<div id="carousel" class="carousel"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
@@ -20,13 +20,11 @@
     document.addEventListener('DOMContentLoaded', () => {
         new Carousel({
             slides: top_250_movies,
-            containerId: 'carousel1'
+            containerId: 'carousel',
+            showGoto: false,
+            showAutoPlay: true,
+            autoPlayEnabled: true,
         });
-        new Carousel({
-            slides: top_250_movies,
-            containerId: 'carousel2'
-        });
-
     });
 </script>
 

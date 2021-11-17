@@ -4,23 +4,25 @@ import {setEventListeners} from "./carousel-event-listeners.js";
 const { gsap, imagesLoaded } = window;
 
 class Carousel {
-    constructor(options) {
-        if(options.hasOwnProperty("slides")){
-            this.slides = options.slides;
+    constructor(props) {
+        if(props.hasOwnProperty("slides")){
+            this.slides = props.slides;
         } else {
             console.log("There is no correct slides data");
             return;
         }
 
+        this.props = props;
+
         this.currentIndex = 1;
-        this.isAutoScrollEnabled = false;
+        this.isAutoScrollEnabled = props.autoPlayEnabled;
         this.autoScrollInterval = 1000;
         this.autoScrollIntervalID = null;
         this.autoScrollDurationSeconds = 5;
         this.nextSlideScrollDurarion = 300;
         this.gotoSlideTimeout = 0;
 
-        this.carouselInitInterface(options.containerId);
+        this.carouselInitInterface(props);
 
         this.setEventListeners(this);
 
@@ -32,7 +34,9 @@ class Carousel {
 
     autoScroll(shiftSlidesCount = 1) {
         if(this.isAutoScrollEnabled) {
-            this.buttons.autoplay.checked = true;
+            if(this.props.showAutoPlay) {
+                this.buttons.autoplay.checked = true;
+            }
             this.autoScrollIntervalID = setInterval(() => this.swapCards(shiftSlidesCount), this.autoScrollInterval);
             setTimeout(() => this.cancelAutoscroll(), this.autoScrollDurationSeconds * 1000)
         }
@@ -42,7 +46,9 @@ class Carousel {
         this.isAutoScrollEnabled = false;
         this.autoScrollIntervalID && clearInterval(this.autoScrollIntervalID);
         this.autoScrollIntervalID = null;
-        this.buttons.autoplay.checked = false;
+        if(this.props.showAutoPlay) {
+            this.buttons.autoplay.checked = false;
+        }
     }
 
     onKeyDown(event) {
@@ -126,7 +132,6 @@ class Carousel {
 
     init() {
         let tl = gsap.timeline();
-
         tl
             .to(this.cardsContainerEl.children, {
             delay: 0,
@@ -138,15 +143,6 @@ class Carousel {
             },
             "--card-translateY-offset": "50%",
         })
-            .to(
-                [this.buttons.prev, this.buttons.next],
-                {
-                    duration: 0.4,
-                    opacity: 1,
-                    pointerEvents: "all",
-                },
-                "-=0.4"
-            );
     }
 
     waitForImages = () => {

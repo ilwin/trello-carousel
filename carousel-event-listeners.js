@@ -1,49 +1,54 @@
-export const setEventListeners = (context) => {
-    context.buttons = {
+export const setEventListeners = (_this) => {
+    _this.buttons = {
         prev: document.querySelector(".btn--left"),
         next: document.querySelector(".btn--right"),
         autoplay: document.querySelector('#autoplay-checkbox')
     };
 
-    context.inputs = {
+    _this.inputs = {
         autoplayDuration: document.querySelector("#autoscroll-duration"),
         goto: document.querySelector("#goto")
     }
 
-    context.buttons.next.addEventListener("click", () => {
-        context.cancelAutoscroll();
-        context.swapCards(1, context.nextSlideScrollDurarion);
+    _this.buttons.next.addEventListener("click", () => {
+        _this.cancelAutoscroll();
+        _this.swapCards(1, _this.nextSlideScrollDurarion);
     });
-    context.buttons.prev.addEventListener("click", () => {
-        context.cancelAutoscroll();
-        context.swapCards(-1, context.nextSlideScrollDurarion);
+    _this.buttons.prev.addEventListener("click", () => {
+        _this.cancelAutoscroll();
+        _this.swapCards(-1, _this.nextSlideScrollDurarion);
     });
 
-    context.buttons.autoplay.addEventListener("change", (event) => {
-        if(event.target.checked) {
-            context.isAutoScrollEnabled = true;//Click on Manual scrolling cancels autoplay
-            context.autoScroll();
-        } else {
-            context.isAutoScrollEnabled = false;
-            context.cancelAutoscroll();
-        };
-    })
-    context.buttons.autoplay.checked = false;
-    context.inputs.autoplayDuration.value = context.autoScrollDurationSeconds;
-    context.inputs.autoplayDuration.addEventListener("change", (event) => {
-        context.autoScrollDuration = parseInt(event.target.value);
-        event.target.value = parseInt(event.target.value);
-        context.cancelAutoscroll();
-        context.autoScrollFlag = true;
-        context.autoScroll();
-    });
-    context.inputs.goto.addEventListener('change', (event) => {
-        const goto = Math.abs(parseInt(event.target.value));
-        const jumpSize = Math.abs(goto - context.currentIndex);
-        const direction = Math.sign(goto - context.currentIndex);
-        context.cancelAutoscroll();
-        context.swapCards(direction * jumpSize, context.gotoSlideTimeout);
-    })
+    if(_this.props.showAutoPlay) {
+        _this.buttons.autoplay.addEventListener("change", (event) => {
+            if(event.target.checked) {
+                _this.isAutoScrollEnabled = true;//Click on Manual scrolling cancels autoplay
+                _this.autoScroll();
+            } else {
+                _this.isAutoScrollEnabled = false;
+                _this.cancelAutoscroll();
+            };
+        });
+        _this.buttons.autoplay.checked = false;
+        _this.inputs.autoplayDuration.value = _this.autoScrollDurationSeconds;
+        _this.inputs.autoplayDuration.addEventListener("change", (event) => {
+            _this.autoScrollDuration = parseInt(event.target.value);
+            event.target.value = parseInt(event.target.value);
+            _this.cancelAutoscroll();
+            _this.autoScrollFlag = true;
+            _this.autoScroll();
+        });
+    }
 
-    document.addEventListener('keydown', (event) => context.onKeyDown(event));
+    if(_this.props.showGoto) {
+        _this.inputs.goto.addEventListener('change', (event) => {
+            const goto = Math.abs(parseInt(event.target.value));
+            const jumpSize = Math.abs(goto - _this.currentIndex);
+            const direction = Math.sign(goto - _this.currentIndex);
+            _this.cancelAutoscroll();
+            _this.swapCards(direction * jumpSize, _this.gotoSlideTimeout);
+        })
+    }
+
+    document.addEventListener('keydown', (event) => _this.onKeyDown(event));
 }
