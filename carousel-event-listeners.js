@@ -43,10 +43,10 @@ export const setEventListeners = (_this) => {
     if(_this.props.showGoto) {
         _this.inputs.goto.addEventListener('change', (event) => {
             const goto = Math.abs(parseInt(event.target.value));
-            const jumpSize = Math.abs(goto - _this.currentIndex);
-            const direction = Math.sign(goto - _this.currentIndex);
             _this.cancelAutoscroll();
-            _this.swapCards(direction * jumpSize, _this.gotoSlideTimeout);
+            if(goto <= _this.slides.length) {
+                _this.gotoSlide(goto);
+            }
         })
     }
 

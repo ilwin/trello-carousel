@@ -1,4 +1,6 @@
-export const buildSlidesHtml =  (slides) => {
+export function buildSlidesHtmlInitial(_this) {
+    console.log(this)
+    const slides = this.slides;
     const cardsContainerEl = document.querySelector(".cards__wrapper");
     slides.map((slide, index) => {
         const divCard = document.createElement("div");
@@ -11,7 +13,7 @@ export const buildSlidesHtml =  (slides) => {
             "theRest": "hidden--card"
         }
         divCard.setAttribute("class", "card");
-        divCard.setAttribute("id", `card-${index + 1}`);
+        divCard.setAttribute("id", _this.getCardIdString(index + 1));
 
         //Set classes for image wrapper
         if (classById.hasOwnProperty((index + 1).toString())) {
@@ -30,7 +32,7 @@ export const buildSlidesHtml =  (slides) => {
 
         const info = document.createElement("div");
         info.setAttribute("class", "card__info");
-        info.textContent = `#${index+1}`;
+        info.textContent = `#${index + 1}`;
 
         divCardImage.append(img);
         divCard.append(divCardImage);

@@ -1,6 +1,8 @@
-import {buildSlidesHtml} from "./carousel-build-html.js";
+import {buildSlidesHtmlInitial} from "./carousel-build-html.js";
 import {carouselInitInterface} from "./carousel-interface.js";
 import {setEventListeners} from "./carousel-event-listeners.js";
+import {setClassesByCurrentIndex} from "./setClassesByCurrentIndex.js";
+
 const { gsap, imagesLoaded } = window;
 
 class Carousel {
@@ -14,20 +16,29 @@ class Carousel {
 
         this.props = props;
 
+        this.cardIdPrefix = 'card-';
+
+        this.currentCardClass = "current--card"
+        this.previousCardClass = "previous--card"
+        this.previousPreviousCardClass = "previous-previous--card"
+        this.nextCardClass = "next--card"
+        this.nextNextCardClass = "next-next--card"
+        this.hiddenCardClass = "hidden--card"
+
         this.currentIndex = 1;
         this.isAutoScrollEnabled = props.autoPlayEnabled;
         this.autoScrollInterval = 1000;
         this.autoScrollIntervalID = null;
         this.autoScrollDurationSeconds = 5;
         this.nextSlideScrollDurarion = 300;
-        this.gotoSlideTimeout = 0;
 
         this.carouselInitInterface(props);
 
         this.setEventListeners(this);
 
         this.cardsContainerEl = document.querySelector(".cards__wrapper");
-        this.buildSlidesHtml(this.slides);
+        this.buildSlidesHtmlInitial = buildSlidesHtmlInitial.bind(this);
+        this.buildSlidesHtmlInitial();
         this.waitForImages();
         this.autoScroll();
     }
@@ -42,13 +53,19 @@ class Carousel {
         }
     }
 
-    cancelAutoscroll() {
+        cancelAutoscroll() {
         this.isAutoScrollEnabled = false;
         this.autoScrollIntervalID && clearInterval(this.autoScrollIntervalID);
         this.autoScrollIntervalID = null;
         if(this.props.showAutoPlay) {
             this.buttons.autoplay.checked = false;
         }
+    }
+
+    gotoSlide(id) {
+        this.currentIndex = id;
+        this.removeClassesFromActiveSlides();
+        this.setClassesByCurrentIndex(this);
     }
 
     onKeyDown(event) {
@@ -71,11 +88,25 @@ class Carousel {
     }
 
     removeClassesFromActiveSlides() {
-        this.currentCardEl.classList.remove("current--card");
-        this.previousCardEl.classList.remove("previous--card");
-        this.nextCardEl.classList.remove("next--card");
-        this.previousPreviousCardEl.classList.remove("previous-previous--card");
-        this.nextNextCardEl.classList.remove("next-next--card");
+        let tmp = document.getElementById(this.getCurrentCardIdString());
+            tmp.classList.remove(this.currentCardClass);
+            tmp.classList.add(this.hiddenCardClass);
+
+        tmp = document.getElementById(this.getPreviousCardIDString());
+            tmp.classList.remove(this.previousCardClass);
+            tmp.classList.add(this.hiddenCardClass);
+
+        tmp = document.getElementById(this.getPreviousPreviousCardIDString());
+            tmp.classList.remove(this.previousPreviousCardClass);
+            tmp.classList.add(this.hiddenCardClass);
+
+        tmp = document.getElementById(this.getNextCardIDString());
+            tmp.classList.remove(this.nextCardClass);
+            tmp.classList.add(this.hiddenCardClass);
+
+        tmp = document.getElementById(this.getNextNextCardIDString());
+            tmp.classList.remove(this.nextNextCardClass);
+            tmp.classList.add(this.hiddenCardClass);
     }
 
     swapCards(shiftSlidesCount=1, scrollSpeed=this.autoScrollInterval) {
@@ -88,46 +119,41 @@ class Carousel {
         }
     }
 
+    getSlideIndexByDelta(delta) {
+        return       % this.slides.length || this.slides.length;
+    }
+
+
+
     swapCardsClass(shiftSlidesCount) {
-        this.selectCurrentlyActiveSlides();
         this.removeClassesFromActiveSlides();
-        this.currentCardEl.style.zIndex = "50";
+        // this.currentCardEl.style.zIndex = "50";
+        this.currentIndex = this.getSlideIndexByDelta(shiftSlidesCount);
+        this.setClassesByCurrentIndex(this);
+    }
 
-        if (shiftSlidesCount === 1) {
-            this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-            this.previousCardEl.style.zIndex = "20";
-            this.nextCardEl.style.zIndex = "30";
-            this.currentCardEl.classList.add("previous--card");
-            this.previousCardEl.classList.add("previous-previous--card");
-            this.nextCardEl.classList.add("current--card");
-            this.nextNextCardEl.classList.add("next--card");
-            this.previousPreviousCardEl.classList.add("hidden--card");
-            //loop through all.At the end just to start
-            const newPreviousPreviousCardEl = document.getElementById(
-                `card-${(this.currentIndex + 2) % this.slides.length || this.currentIndex + 2}`)
-            newPreviousPreviousCardEl.classList.remove("hidden--card");
-            newPreviousPreviousCardEl.classList.add("next-next--card");
-        } else if (shiftSlidesCount === -1) {
-            this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+    getCardIdString(id) {
+        return this.cardIdPrefix + id;
+    }
 
-            if (this.previousCardEl) {
-                this.previousCardEl.style.zIndex = "30";
-            }
-            if (this.nextCardEl) {
-                this.nextCardEl.style.zIndex = "20";
-            }
+    getCurrentCardIdString() {
+        return this.getCardIdString(this.currentIndex);
+    }
 
-            this.currentCardEl.classList.add("next--card");
-            this.previousCardEl.classList.add("current--card");
-            this.nextCardEl.classList.add("next-next--card");
-            this.previousPreviousCardEl.classList.add("previous--card");
-            this.nextNextCardEl.classList.add("hidden--card");
-            //loop through all.At the end just to start
-            const newPreviousPreviousCardEl = document.getElementById(
-                `card-${(this.currentIndex - 2 + this.slides.length) % this.slides.length || this.slides.length}`)
-            newPreviousPreviousCardEl.classList.remove("hidden--card");
-            newPreviousPreviousCardEl.classList.add("previous-previous--card");
-        }
+    getPreviousCardIDString() {
+        return this.getCardIdString(this.getSlideIndexByDelta(-1));
+    }
+
+    getPreviousPreviousCardIDString() {
+        return this.getCardIdString(this.getSlideIndexByDelta(-2));
+    }
+
+    getNextCardIDString() {
+        return this.getCardIdString(this.getSlideIndexByDelta(1));
+    }
+
+    getNextNextCardIDString() {
+        return this.getCardIdString(this.getSlideIndexByDelta(2));
     }
 
     init() {
@@ -176,10 +202,13 @@ class Carousel {
             });
         });
     };
+
+    // buildSlidesHtmlInitial = buildSlidesHtmlInitial.bind(this)
 }
 
-Carousel.prototype.buildSlidesHtml = buildSlidesHtml;
+// Carousel.prototype.buildSlidesHtmlInitial = buildSlidesHtmlInitial;
 Carousel.prototype.carouselInitInterface = carouselInitInterface;
 Carousel.prototype.setEventListeners = setEventListeners;
+Carousel.prototype.setClassesByCurrentIndex = setClassesByCurrentIndex;
 
 export default Carousel;

@@ -1,17 +1,19 @@
 export const carouselInitInterface = (props) => {
 
         let content =
-        '    <div class="cardList">\n' +
-        '        <div class="cards__wrapper"></div>\n' +
-        '\n' +
-        '        <button class="cardList__btn btn btn--left">\n' +
-        '            <div class="icon">\n' +
-        '                <svg>\n' +
-        '                    <use xlink:href="#arrow-left"></use>\n' +
-        '                </svg>\n' +
-        '            </div>\n' +
-        '        </button>\n' +
-        '        <div class="cardList__customControls">\n';
+        `    <div class="cardList">
+        <div class="cards__wrapper"></div>
+
+        <button class="cardList__btn btn btn--left">
+            <div class="icon">
+                <svg>
+                    <use xlink:href="#arrow-left"></use>
+                </svg>
+            </div>
+        </button>
+        <div class="cardList__customControls">
+<!--        ${props.showAutoPlay && `<div>hello</div>`}-->
+`;
 
         content +=
             props.showAutoPlay ?
